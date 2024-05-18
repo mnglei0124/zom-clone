@@ -5,7 +5,7 @@ import React from "react";
 interface HomeCardProps {
   img: string;
   title: string;
-  desciption: string;
+  description: string;
   className: string;
   handleClick: () => void;
 }
@@ -13,7 +13,7 @@ interface HomeCardProps {
 export const HomeCard = ({
   img,
   title,
-  desciption,
+  description,
   handleClick,
   className,
 }: HomeCardProps) => {
@@ -31,7 +31,7 @@ export const HomeCard = ({
 
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold ">{title}</h1>
-        <p className="text-lg font-normal">{desciption}</p>
+        <p className="text-lg font-normal">{description}</p>
       </div>
     </div>
   );

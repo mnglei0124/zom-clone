@@ -11,6 +11,7 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import ReactDatePicker from "react-datepicker";
+import { Input } from "./ui/input";
 
 const MeetingTypeList = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const MeetingTypeList = () => {
   const client = useStreamVideoClient();
   const [values, setValues] = useState({
     dateTime: new Date(),
-    desciption: "",
+    description: "",
     link: "",
   });
   const [callDetails, setCallDetails] = useState<Call>();
@@ -45,15 +46,15 @@ const MeetingTypeList = () => {
 
       const startsAt =
         values.dateTime.toISOString() || new Date(Date.now()).toISOString();
-      const desciption = values.desciption || "Instant Meeting";
+      const description = values.description || "Instant Meeting";
 
       await call.getOrCreate({
-        data: { starts_at: startsAt, custom: { desciption } },
+        data: { starts_at: startsAt, custom: { description } },
       });
 
       setCallDetails(call);
 
-      if (!values.desciption) {
+      if (!values.description) {
         router.push(`/meeting/${call.id}`);
       }
 
@@ -75,28 +76,28 @@ const MeetingTypeList = () => {
       <HomeCard
         img="/icons/add-meeting.svg"
         title="New Meeting"
-        desciption="Start an instant meeting"
+        description="Start an instant meeting"
         handleClick={() => setMeetingState("isInstantMeeting")}
         className="bg-orange-1"
       />
       <HomeCard
         img="/icons/schedule.svg"
         title="Schedule Meeting"
-        desciption="Plan your meeting"
+        description="Plan your meeting"
         handleClick={() => setMeetingState("isScheduleMeeting")}
         className="bg-blue-1"
       />
       <HomeCard
         img="/icons/recordings.svg"
         title="View Recordings"
-        desciption="Check out your recordings"
+        description="Check out your recordings"
         handleClick={() => router.push("/recordings")}
         className="bg-purple-1"
       />
       <HomeCard
         img="/icons/join-meeting.svg"
         title="Join Meeting"
-        desciption="via invitation link"
+        description="via invitation link"
         handleClick={() => setMeetingState("isJoiningMeeting")}
         className="bg-yellow-1"
       />
@@ -110,12 +111,12 @@ const MeetingTypeList = () => {
         >
           <div className="flex flex-col gap-2.5">
             <label className="text-base text-normal leading-[22px] text-sky-2">
-              Add a desciption
+              Add a description
             </label>
             <Textarea
               className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
               onChange={(e) =>
-                setValues({ ...values, desciption: e.target.value })
+                setValues({ ...values, description: e.target.value })
               }
             />
           </div>
@@ -158,6 +159,21 @@ const MeetingTypeList = () => {
         className="text-center"
         handleClick={createMeeting}
       />
+
+      <MeetingModal
+        isOpen={meetingState === "isJoiningMeeting"}
+        onClose={() => setMeetingState(undefined)}
+        title="Type the linke here"
+        className="text-center"
+        buttonText="Join meeting"
+        handleClick={() => router.push("values.link")}
+      >
+        <Input
+          placeholder="Meeting Link"
+          className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+          onChange={(e) => setValues({ ...values, link: e.target.value })}
+        />
+      </MeetingModal>
     </section>
   );
 };
